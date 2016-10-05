@@ -14,10 +14,39 @@ function getPrimeFinder(){
 
 	var cache = {};
 
-	function isPrime(n){
+	return function (n){
 		if (typeof cache[n] === 'undefined')
 			cache[n] = checkPrime(n);
 		return cache[n];
 	}
-	return isPrime;
+	
 }
+
+function getOddEvenFinder(){
+	function isOddOrEven(n){
+		console.log('processing ', n);
+		return n % 2 === 0 ? 'even' : 'odd';
+	}
+
+	var cache = {};
+
+	return function (n){
+		if (typeof cache[n] === 'undefined')
+			cache[n] = isOddOrEven(n);
+		return cache[n];
+	}
+	
+}
+
+
+function memoize(algoFn){
+	var cache = {};
+
+	return function (){
+		var key = JSON.stringify(arguments);
+		if (typeof cache[key] === 'undefined')
+			cache[key] = algoFn.apply(this, arguments);
+		return cache[key];
+	}
+}
+
