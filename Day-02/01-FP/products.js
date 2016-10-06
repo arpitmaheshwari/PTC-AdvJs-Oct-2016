@@ -169,8 +169,144 @@ describe('Filter', function(){
 			var affordableProducts = filter(products, affordableProductCriteria);
 			console.table(affordableProducts);
 		});
-
-
-
 	})
 });
+
+describe("All", function(){
+	function all(list, criteriaFn){
+		for(var i=0; i < list.length; i++)
+			if (!criteriaFn(list[i])) return false;
+		return true;
+	}
+	console.log("Are all costly products ? ", all(products, function(product){
+		return product.cost > 50;
+	}));
+})
+
+describe("Any", function(){
+	function any(list, criteriaFn){
+		for(var i=0; i < list.length; i++)
+			if (criteriaFn(list[i])) return true;
+		return false;
+	}
+	console.log("Are there any costly products ? ", any(products, function(product){
+		return product.cost > 50;
+	}));
+});
+
+describe("Each", function(){
+	function each(list, actionFn){
+		for(var i=0; i<list.length; i++)
+			actionFn(list[i]);
+	}
+	describe("Print names of products", function(){
+		each(products, function(product){
+			console.log(product.name);
+		});
+	});
+});
+
+describe("Transform", function(){
+	function transform(list, transformFn){
+		var result = [];
+		for(var i=0; i<list.length; i++)
+			result.push(transformFn(list[i]));
+		return result;
+	}
+	describe("Products with 10% discount", function(){
+		var discountedProducts = transform(products, function(product){
+			return {
+				id : product.id,
+				name : product.name,
+				units :product.units,
+				cost : product.cost,
+				discountedCost : product.cost * 0.9,
+				category : product.category
+			};
+		});
+		console.table(discountedProducts);
+	});
+});
+
+describe("GroupBy", function(){
+	function printGroup(groupedItems){
+		for(var key in groupedItems){
+			describe("Key - " + key, function(){
+				console.table(groupedItems[key]);
+			});
+		}
+	}
+	describe("Group Products by category", function(){
+		function groupProductsByCagegory(){
+			var result = {
+				1 : [],
+				2 : []
+			};
+			for(var i=0; i<products.length; i++){
+				var category = products[i].category;
+				result[category].push(products[i]);
+			}
+			return result;
+		}
+		var productsByCategory = groupProductsByCagegory();
+		printGroup(productsByCategory);
+	});
+
+	describe("Group any list by any attribute", function(){
+		function gruopBy(list, attrName){
+			var result = {};
+			for(var i=0; i<list.length; i++){
+				var key = list[i][attrName];
+				if (typeof result[key] === 'undefined')
+					result[key] = [];
+				result[key].push(list[i]);
+			}
+			return result;
+		}
+		var productsByCategory = gruopBy(products, "category");
+		printGroup(productsByCategory);
+	})
+
+	describe("Group any list by any criteria", function(){
+		function gruopBy(list, keySelectorFn){
+			var result = {};
+			for(var i=0; i<list.length; i++){
+				var key = keySelectorFn(list[i]);
+				/*if (typeof result[key] === 'undefined')
+					result[key] = [];*/
+				result[key] = result[key] || [];
+				result[key].push(list[i]);
+			}
+			return result;
+		}
+		var productsByCost = gruopBy(products, function(product){
+			return product.cost > 50 ? "costly" : "affordable";
+		});
+		printGroup(productsByCost);
+	})
+})
+
+
+
+
+function debounce(fn, delay){
+	var lastInvTime = null,
+		result = null;
+	return function(){
+		if (!lastInvTime || (new Date() - lastInvTime) > delay){
+			lastInvTime = new Date();
+			result = fn.apply(this, arguments);
+		}
+		return result;
+	}
+}
+
+
+
+
+
+
+
+
+
+
