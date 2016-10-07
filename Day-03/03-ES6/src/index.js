@@ -1,4 +1,11 @@
 console.log("Welcome to es6");
+import Spinner from './Spinner';
+window.Spinner = Spinner;
+
+console.log(Spinner);
+
+/*var spinner = new Spinner();
+console.log(spinner.up());*/
 
 const year = 2016;
 
