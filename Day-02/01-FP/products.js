@@ -51,9 +51,10 @@ describe('Sorting', function(){
 			for(var i=0; i < list.length-1; i++)
 				for(var j=i+1; j < list.length; j++)
 					if (list[i][attrName] > list[j][attrName]){
-						var temp = list[i];
+						/*var temp = list[i];
 						list[i] = list[j];
-						list[j] = temp;
+						list[j] = temp;*/
+						[list[i], list[j]] = [list[j], list[i]];
 					}
 		}
 		describe('Products by cost', function(){
@@ -215,14 +216,16 @@ describe("Transform", function(){
 	}
 	describe("Products with 10% discount", function(){
 		var discountedProducts = transform(products, function(product){
-			return {
+			/*return {
 				id : product.id,
 				name : product.name,
 				units :product.units,
 				cost : product.cost,
 				discountedCost : product.cost * 0.9,
 				category : product.category
-			};
+			};*/
+			let {id, name, units, cost, category } = product;
+			return {id, name, units, cost, discountedCost : cost * 0.9, category};
 		});
 		console.table(discountedProducts);
 	});

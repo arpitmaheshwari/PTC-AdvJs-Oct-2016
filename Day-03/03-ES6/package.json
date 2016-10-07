@@ -1,0 +1,23 @@
+{
+  "name": "testapp",
+  "version": "0.1.0",
+  "description": "a sample app setup for es6",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel -w src -d  dist"
+  },
+  "keywords": [
+    "es6",
+    "demo"
+  ],
+  "babel" : {
+    "presets" : ["es2015"]
+  },
+  "author": "Magesh K",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0"
+  }
+}

@@ -2,12 +2,17 @@ var pubsub = (function(){
 
 	var subscribers = {};
 
-	function broadcast(eventName){
+	/*function broadcast(eventName){
 		var _subscriptions = subscribers[eventName] || [];
 		var args = Array.prototype.slice.call(arguments, 1);
 		_subscriptions.forEach(function(subscriptionFn){
 			subscriptionFn.apply(this, args);
 		});
+		return this;
+	}*/
+	function broadcast(eventName, ...args){
+		var _subscriptions = subscribers[eventName] || [];
+		_subscriptions.forEach(subscriptionFn => subscriptionFn(...args));
 		return this;
 	}
 	function subscribe(eventName, fn){
@@ -28,3 +33,7 @@ var pubsub = (function(){
 		unsubscribe : unsubscribe
 	}
 })();
+
+pubsub.broadcast("myEvent", 10, 30, { id :100})
+
+pubsub.subscribe("myEvent", function(n1, n2, obj))
